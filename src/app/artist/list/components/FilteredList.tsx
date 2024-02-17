@@ -1,5 +1,15 @@
+'use client'
+
 import ArtistCard from './ArtistCard'
-import { Artists } from '../page'
+
+type Artists = {
+  artistId: number
+  artistName: string
+  location: string
+  description: string
+  creatorArtCategory: string
+  liked: number
+}
 
 type filteredListProps = {
   options: string[]

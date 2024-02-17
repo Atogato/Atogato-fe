@@ -1,17 +1,25 @@
 'use client'
-import { useState } from 'react'
+
+import { useEffect, useState } from 'react'
 import FilteredList from './FilteredList'
-import { Artists } from '../page'
 import { localStorage } from '@/app/storage'
 import ArtistSection from '@/components/ArtistSection'
+
+type Artists = {
+  artistId: number
+  artistName: string
+  location: string
+  description: string
+  creatorArtCategory: string
+  liked: number
+}
 
 type artistsProps = {
   data: Artists[]
 }
 
 export default function Filter({ data }: artistsProps): JSX.Element {
-  const token = localStorage.getItem('token')
-
+  const [token, setToken] = useState<string | null>(null)
   console.log('Token found in localStorage:', token)
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(['All', 'All'])
@@ -34,6 +42,13 @@ export default function Filter({ data }: artistsProps): JSX.Element {
       return updatedIsActive
     })
   }
+
+  useEffect(() => {
+    const authToken = localStorage.getItem('token')
+    if (!token && authToken) {
+      setToken(authToken)
+    }
+  }, [])
 
   return (
     <div>
