@@ -7,6 +7,9 @@ interface ArtistProps {
   user: Artists
 }
 
+const TEXT =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip exea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollitanim id est laborum.'
+
 export default function Phone({ user }: ArtistProps): JSX.Element {
   return (
     <div className="relative mx-auto h-full max-h-[650px] min-h-[600px] w-full min-w-[320px] max-w-[350px] overflow-auto rounded-3xl border-4  border-zinc-400 bg-gray-200 ">
@@ -28,13 +31,7 @@ export default function Phone({ user }: ArtistProps): JSX.Element {
             <p className="text-sm">{user.creatorArtCategory}</p>
             <p className="text-sm">{user.location}</p>
           </div>
-          <p className="text-sm">
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-            anim id est laborum."
-          </p>
+          <p className="text-sm">{TEXT}</p>
         </div>
       </div>
       <div className="h-full w-full bg-white"></div>

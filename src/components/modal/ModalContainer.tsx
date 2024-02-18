@@ -9,7 +9,7 @@ type ModalContentType = {
   application: ({ ...props }: { [x: string]: any }) => React.JSX.Element | undefined
 }
 
-export const MODAL_CONTENT_TYPES: ModalContentType = {
+export const MODAL_CONTENT_TYPES:ModalContentType  = {
   default: DefaultModal,
   application: ApplicationModal,
 }
