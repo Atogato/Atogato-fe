@@ -4,6 +4,7 @@ import Comment from './Comment'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { useModalDispatch } from '@/hooks/modal/useModal'
 
 interface DataType {
   userId: string
@@ -28,6 +29,8 @@ export default function Content() {
   const params = useParams()
   const id = params.project_id
   console.log(id)
+
+  const { openModal, closeModal } = useModalDispatch()
 
   const [projectData, setProjectData] = useState<DataType>()
   useEffect(() => {
@@ -156,7 +159,10 @@ export default function Content() {
         </div>
       </div>
       <div className="mt-5 flex h-[64px] justify-center">
-        <button className="pretendard mx-[40px] w-full rounded bg-[#7960BE] px-[479.5px] py-[15.5px] text-[20px] font-bold text-white">
+        <button
+          onClick={() => openModal('application')}
+          className="pretendard mx-[40px] w-full rounded bg-[#7960BE] px-[479.5px] py-[15.5px] text-[20px] font-bold text-white"
+        >
           참여하기
         </button>
       </div>
