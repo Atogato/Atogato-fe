@@ -10,5 +10,10 @@ export default function useIsLogin() {
     }
   }, [isLogin])
 
-  return { isLogin }
+  const setLogout = () => {
+    localStorage.removeItem('token')
+    setIsLogin(false)
+  }
+
+  return { isLogin, setLogout }
 }
