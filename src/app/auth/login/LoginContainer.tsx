@@ -3,8 +3,7 @@
 import useIsLogin from '@/hooks/auth/useIsLogin'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-export default function LoginContainer({ children }: { children: JSX.Element[] }) {
-  // TODO: login 여부에 따른 RouteGuard 제작(페이지에 진입하기 전에 로그인 여부를 판단)
+export default function LoginContainer({ children }: { children: JSX.Element | JSX.Element[] }) {
   const { isLogin } = useIsLogin()
   const router = useRouter()
 
@@ -13,5 +12,5 @@ export default function LoginContainer({ children }: { children: JSX.Element[] }
       router.replace('/project/list')
     }
   }, [isLogin])
-  return <div className="relative">{children}</div>
+  return <div className="relative flex flex-col items-center gap-10 pt-24">{children}</div>
 }

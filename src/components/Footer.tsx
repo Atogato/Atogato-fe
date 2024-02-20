@@ -1,4 +1,14 @@
+'use client'
+
+import { usePathname } from 'next/navigation'
+
+const GUARD_ROUTES = ['auth']
+
 export default function Footer() {
+  const pathname = usePathname()
+  const isDisabled = GUARD_ROUTES.find((route) => pathname.split('/')[1] === route)
+  if (isDisabled) return <></>
+
   return (
     <div>
       <footer className="rounded-lg bg-white p-4 shadow dark:bg-gray-800 md:px-6 md:py-8">
