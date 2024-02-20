@@ -12,9 +12,10 @@ export function useModalState() {
 export function useModalDispatch() {
   const dispatch = useContext(ModalSetterContext)
 
-  function openModal() {
+  function openModal(modal: string) {
     if (!dispatch) throw new Error('Cannot find ModalProvider')
     dispatch({ type: 'OPEN' })
+    dispatch({ type: 'CHANGE_DEFAULT', payload: modal })
   }
   function closeModal() {
     if (!dispatch) throw new Error('Cannot find ModalProvider')

@@ -3,11 +3,11 @@
 import { useReducer, createContext, ReactNode, Dispatch, useContext } from 'react'
 
 export type ModalState = {
-  type: 'default'
   isOpen: boolean
+  modal: string
 }
 
-type Action = { type: 'OPEN' } | { type: 'CLOSE' }
+type Action = { type: 'OPEN' } | { type: 'CLOSE' } | { type: 'CHANGE_DEFAULT'; payload: string }
 
 type ToggleDispatch = Dispatch<Action>
 
@@ -27,13 +27,18 @@ function reducer(state: ModalState, action: Action): ModalState {
         ...state,
         isOpen: false,
       }
+    case 'CHANGE_DEFAULT':
+      return {
+        ...state,
+        modal: action.payload,
+      }
     default:
       throw new Error('unhandled action')
   }
 }
 
 export function ModalProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, { type: 'default', isOpen: false })
+  const [state, dispatch] = useReducer(reducer, { isOpen: false, modal: 'default' })
 
   return (
     <ModalStateContext.Provider value={state}>
