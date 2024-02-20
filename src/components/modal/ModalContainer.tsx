@@ -21,7 +21,7 @@ export default function ModalContainer() {
   return (
     <>
       <Modal
-        className="fixed left-1/2 top-1/2 z-50 flex h-1/2 w-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-center bg-white text-center"
+        className="fixed left-1/2 top-1/2 z-50 flex h-1/2 w-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-center text-center"
         isOpen={isOpen}
       />
     </>
