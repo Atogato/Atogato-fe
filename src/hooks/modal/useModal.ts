@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import { ModalStateContext, ModalSetterContext } from '@/context/ModalProvider'
+import { ModalContentType } from '@/components/modal/ModalContainer'
 
 // Modal state custom hook
 export function useModalState() {
@@ -12,9 +13,10 @@ export function useModalState() {
 export function useModalDispatch() {
   const dispatch = useContext(ModalSetterContext)
 
-  function openModal() {
+  function openModal(modal: keyof ModalContentType) {
     if (!dispatch) throw new Error('Cannot find ModalProvider')
     dispatch({ type: 'OPEN' })
+    dispatch({ type: 'CHANGE', payload: modal })
   }
   function closeModal() {
     if (!dispatch) throw new Error('Cannot find ModalProvider')

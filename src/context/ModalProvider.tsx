@@ -1,13 +1,14 @@
 'use client'
 
 import { useReducer, createContext, ReactNode, Dispatch, useContext } from 'react'
+import { ModalContentType } from '@/components/modal/ModalContainer'
 
 export type ModalState = {
-  type: 'default'
   isOpen: boolean
+  modal: keyof ModalContentType
 }
 
-type Action = { type: 'OPEN' } | { type: 'CLOSE' }
+type Action = { type: 'OPEN' } | { type: 'CLOSE' } | { type: 'CHANGE'; payload: keyof ModalContentType }
 
 type ToggleDispatch = Dispatch<Action>
 
@@ -27,13 +28,18 @@ function reducer(state: ModalState, action: Action): ModalState {
         ...state,
         isOpen: false,
       }
+    case 'CHANGE':
+      return {
+        ...state,
+        modal: action.payload,
+      }
     default:
       throw new Error('unhandled action')
   }
 }
 
 export function ModalProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, { type: 'default', isOpen: false })
+  const [state, dispatch] = useReducer(reducer, { isOpen: false, modal: 'default' })
 
   return (
     <ModalStateContext.Provider value={state}>
