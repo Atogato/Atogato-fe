@@ -2,11 +2,11 @@ import { useModalDispatch } from '@/hooks/modal/useModal'
 
 export default function ApplicationModal({ ...props }) {
   const { isOpen, className } = props
+  const { closeModal } = useModalDispatch()
+
   if (!isOpen) {
     return
   }
-
-  const { closeModal } = useModalDispatch()
 
   return (
     <div className={`h-[500px]  rounded-lg bg-[#F2EFF8] ${className}`}>
