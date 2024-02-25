@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react'
 import { localStorage } from '@/app/storage'
+import { useSearchParams } from 'next/navigation'
 
 export default function useIsLogin() {
-  const [isLogin, setIsLogin] = useState(false)
+  const [token, setToken] = useState<string | null>(null)
+  const params = useSearchParams()
 
   useEffect(() => {
-    if (typeof window != undefined && localStorage.getItem('token')) {
-      setIsLogin(true)
+    if (typeof window !== undefined) {
+      setToken(localStorage.getItem('token'))
     }
-  }, [isLogin])
+  }, [params])
 
-  const setLogout = () => {
+  const Logout = () => {
     localStorage.removeItem('token')
-    setIsLogin(false)
+    setToken(null)
   }
 
-  return { isLogin, setLogout }
+  return { isLogin: token !== null, Logout }
 }

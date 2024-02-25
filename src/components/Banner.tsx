@@ -10,7 +10,7 @@ export default function Banner({ className }: { className?: string }) {
         <div className="flex w-[45%] flex-col flex-wrap	gap-48">
           <div>
             <p className="poppins text-2xl font-semibold text-[#7960BE]/70"> Atogato Artist </p>
-            <p className="text-5xl font-semibold leading-snug text-[#171616]/30">
+            <p className="break-keep text-5xl font-semibold leading-snug text-[#171616]/30">
               <strong className="poppins font-semibold text-[#171616]"> Atogato </strong>와 함께 할 아티스트를 찾습니다.
             </p>
           </div>

@@ -10,7 +10,7 @@ export default function Redirect({ token }: { token?: string }) {
   useEffect(() => {
     if (typeof window != undefined && token !== undefined) {
       localStorage.setItem('token', token)
-      router.replace(REDIRECT_URL)
+      router.replace(REDIRECT_URL + `?isLogin=${!!token}`)
     }
   }, [])
 
