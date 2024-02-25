@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Logo from '@/logo.svg'
 import { useEffect } from 'react'
+import useIsLogin from '@/hooks/auth/useIsLogin'
 
 const links = {
   About: '/',
@@ -31,6 +32,7 @@ export function MenuItem({ content }: { content: Menu }) {
 
 export default function Navbar() {
   const menus: Menu[] = ['About', 'Project', 'Artist']
+  const { isLogin, setLogout } = useIsLogin()
 
   function scrollHandler() {
     if (document) {
@@ -90,7 +92,7 @@ export default function Navbar() {
             ))}
           </div>
           <div className="rounded-[40px] px-[36px] py-[16px] text-right text-[15px] leading-none text-[#171616]/50 hover:border-transparent hover:bg-[#7960BE]/75 hover:text-white">
-            <Link href="/auth/login">로그인</Link>
+            {isLogin ? <button onClick={setLogout}> 로그아웃</button> : <Link href="/auth/login">로그인</Link>}
           </div>
         </div>
       </div>
