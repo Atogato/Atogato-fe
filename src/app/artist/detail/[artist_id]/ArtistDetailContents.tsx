@@ -4,8 +4,13 @@ import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
 import { Artist } from '@/types/artist'
 import DOMPurify from 'dompurify'
+import Like from '@/icons/like.svg'
+import FolderDocument from '@/icons/folder-document.svg'
+import ArrowDown from '@/icons/arrow-down.svg'
+import useIsLogin from '@/hooks/auth/useIsLogin'
 
 const PdfViewer = dynamic(() => import('@/components/pdf-viewer'), { ssr: false })
+const BACKEND_LIKE_API = process.env.BACKEND_API_URL + 'artists/favorite'
 
 export default function ArtistDetailContents({ artist }: { artist: Artist }) {
   const DUMMY = {
@@ -18,16 +23,71 @@ export default function ArtistDetailContents({ artist }: { artist: Artist }) {
   }
 
   const [isOpen, setIsOpen] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
   const [isCleaned, setIsCleaned] = useState<Boolean>(false)
+  const { getToken } = useIsLogin()
 
   function toggle() {
     setIsOpen((status) => !status)
   }
 
+  function handlerLikeClick(_: React.MouseEvent) {
+    const token = getToken()
+    if (!token) return
+    fetch(BACKEND_LIKE_API + `/favorite?artistId=${artist.artistId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  }
+
+  function handlerDisLikeClick() {
+    console.log('dislike!')
+    fetch(BACKEND_LIKE_API + `/favorite?artistId=${artist.artistId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify({ artistId: artist.artistId }),
+    })
+  }
+
   useEffect(() => {
+    const fetchFavoriteArtists = async (token: string | null) => {
+      if (!token) return
+      const res = await fetch(BACKEND_LIKE_API, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      })
+
+      const data = await res.json()
+      return new Promise((resolve, reject) => {
+        try {
+          resolve(data)
+        } catch (reason) {
+          reject(reason)
+        }
+      })
+    }
+
     if (typeof window != undefined) {
       artist.description = DOMPurify.sanitize(artist.description)
+      const token = getToken()
       setIsCleaned(true)
+      fetchFavoriteArtists(token).then((favorites) => {
+        if (!favorites || !Array.isArray(favorites)) return
+        console.log('favorites: ', favorites)
+
+        setIsFavorite(
+          !!favorites.find(
+            (info: { artistId: number; artistName: string; selfIntroduction: string }) =>
+              info.artistId === parseInt(artist.artistId),
+          ),
+        )
+      })
     }
   }, [])
 
@@ -40,14 +100,25 @@ export default function ArtistDetailContents({ artist }: { artist: Artist }) {
       <h1 className="hide"> 아티스트 페이지 </h1>
       <section className="flex justify-between">
         <h2 className="hide"> 아티스트 정보 </h2>
-        <div className="w-full">
-          <ul>
-            <li> {artist?.artistName} </li>
-            <li> {artist?.creatorArtCategory} </li>
-          </ul>
-          {isCleaned ? <div dangerouslySetInnerHTML={{ __html: artist.description }} /> : <> Loading...... </>}
-        </div>
-        <div>
+        <section className="flex w-full flex-col gap-y-11">
+          <article>
+            <h3 className="text-[#171616]/30"> 이름 </h3>
+            <p>{artist?.artistName}</p>
+          </article>
+          <article>
+            <h3 className="text-[#171616]/30"> 설명 </h3>
+            {isCleaned ? (
+              <div className="max-h-96 overflow-y-scroll" dangerouslySetInnerHTML={{ __html: artist.description }} />
+            ) : (
+              <> Loading...... </>
+            )}
+          </article>
+          <article>
+            <h3 className="text-[#171616]/30"> 아티스트 분야 </h3>
+            <p> {artist?.creatorArtCategory} </p>
+          </article>
+        </section>
+        <article className="relative h-fit">
           <div className="relative">
             <Image
               className="h-auto w-full"
@@ -56,34 +127,31 @@ export default function ArtistDetailContents({ artist }: { artist: Artist }) {
               width={300}
               height={300}
             ></Image>
-            <div className="absolute bottom-1 right-2 text-white">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="h-6 w-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                />
-              </svg>
-            </div>
+            <button
+              className="absolute bottom-3 right-3 rounded-full border border-[#DBDBDE] bg-white p-2 text-black"
+              onClick={isFavorite ? handlerDisLikeClick : handlerLikeClick}
+            >
+              <Like />
+            </button>
           </div>
-
-          <button className="block" onClick={() => {}}>
+          <button
+            className="absolute right-0 mt-2 block rounded-3xl bg-[#7960BE] px-4 py-2 text-sm text-white"
+            onClick={() => {}}
+          >
             메세지 보내기
           </button>
-        </div>
+        </article>
       </section>
       <section className="mb-5">
         <h2 className="hide"> 관심 분야 </h2>
-        <ul className="flex justify-around">
+        <ul className="flex gap-x-28">
           {DUMMY.detail.map((field, idx) => {
-            return <li key={`detail-field-${idx}`}> 관심 분야: {field} </li>
+            return (
+              <li key={`detail-${field}-${idx}`}>
+                <h3 className="text-[#171616]/30"> 관심 세부 분야 {`${idx + 1}`} </h3>
+                <p> {field} </p>
+              </li>
+            )
           })}
         </ul>
       </section>
@@ -101,30 +169,31 @@ export default function ArtistDetailContents({ artist }: { artist: Artist }) {
                     width={300}
                     height={300}
                     priority
-                  ></Image>
+                  />
                 </li>
               )
             })}
           </ul>
         </div>
       </section>
-      <div className="text-center">
+      <div className="flex justify-center">
         <h2 className="hide"> 포트폴리오 파일 조회 </h2>
         {DUMMY.pdf && (
-          <button onClick={toggle} className="border-2 hover:bg-sky-400 hover:text-blue-700">
-            포트폴리오 보기
+          <button
+            onClick={toggle}
+            className="flex h-fit min-h-[60px] min-w-[570px] items-center justify-between border border-2 border-[#171616] px-4"
+          >
+            <div className="flex gap-4">
+              <FolderDocument color="#171616" />
+              <p> 포트폴리오 보기 </p>
+            </div>
+            <div className="rounded border-2 border-[#171616] text-[#171616]">
+              <ArrowDown />
+            </div>
           </button>
         )}
-        {DUMMY.pdf && isOpen ? <PdfViewer pdf="/test.pdf" /> : <></>}
       </div>
-      {/* <div>
-        <h2 className="hide">SNS 링크</h2>
-        <ul>
-          <li> 유튜브 </li>
-          <li> 인스타그램 </li>
-          <li> 트위터 </li>
-        </ul>
-      </div> */}
+      {DUMMY.pdf && isOpen ? <PdfViewer pdf="/test.pdf" /> : <></>}
     </article>
   )
 }
