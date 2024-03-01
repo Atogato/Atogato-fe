@@ -7,8 +7,10 @@ import DOMPurify from 'dompurify'
 import Like from '@/icons/like.svg'
 import FolderDocument from '@/icons/folder-document.svg'
 import ArrowDown from '@/icons/arrow-down.svg'
+import useIsLogin from '@/hooks/auth/useIsLogin'
 
 const PdfViewer = dynamic(() => import('@/components/pdf-viewer'), { ssr: false })
+const BACKEND_LIKE_API = process.env.BACKEND_API_URL + 'artists/favorite'
 
 export default function ArtistDetailContents({ artist }: { artist: Artist }) {
   const DUMMY = {
@@ -21,16 +23,71 @@ export default function ArtistDetailContents({ artist }: { artist: Artist }) {
   }
 
   const [isOpen, setIsOpen] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
   const [isCleaned, setIsCleaned] = useState<Boolean>(false)
+  const { getToken } = useIsLogin()
 
   function toggle() {
     setIsOpen((status) => !status)
   }
 
+  function handlerLikeClick(_: React.MouseEvent) {
+    const token = getToken()
+    if (!token) return
+    fetch(BACKEND_LIKE_API + `/favorite?artistId=${artist.artistId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  }
+
+  function handlerDisLikeClick() {
+    console.log('dislike!')
+    fetch(BACKEND_LIKE_API + `/favorite?artistId=${artist.artistId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify({ artistId: artist.artistId }),
+    })
+  }
+
   useEffect(() => {
+    const fetchFavoriteArtists = async (token: string | null) => {
+      if (!token) return
+      const res = await fetch(BACKEND_LIKE_API, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      })
+
+      const data = await res.json()
+      return new Promise((resolve, reject) => {
+        try {
+          resolve(data)
+        } catch (reason) {
+          reject(reason)
+        }
+      })
+    }
+
     if (typeof window != undefined) {
       artist.description = DOMPurify.sanitize(artist.description)
+      const token = getToken()
       setIsCleaned(true)
+      fetchFavoriteArtists(token).then((favorites) => {
+        if (!favorites || !Array.isArray(favorites)) return
+        console.log('favorites: ', favorites)
+
+        setIsFavorite(
+          !!favorites.find(
+            (info: { artistId: number; artistName: string; selfIntroduction: string }) =>
+              info.artistId === parseInt(artist.artistId),
+          ),
+        )
+      })
     }
   }, [])
 
@@ -70,7 +127,10 @@ export default function ArtistDetailContents({ artist }: { artist: Artist }) {
               width={300}
               height={300}
             ></Image>
-            <button className="absolute bottom-3 right-3 rounded-full border border-[#DBDBDE] bg-white p-2 text-black">
+            <button
+              className="absolute bottom-3 right-3 rounded-full border border-[#DBDBDE] bg-white p-2 text-black"
+              onClick={isFavorite ? handlerDisLikeClick : handlerLikeClick}
+            >
               <Like />
             </button>
           </div>

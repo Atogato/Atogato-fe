@@ -17,5 +17,9 @@ export default function useIsLogin() {
     setToken(null)
   }
 
-  return { isLogin: token !== null, Logout }
+  const getToken = () => {
+    return token
+  }
+
+  return { isLogin: token !== null, Logout, getToken }
 }
