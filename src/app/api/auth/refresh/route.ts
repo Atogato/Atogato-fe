@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   const refreshedToken = await res.json()
   console.log('new token: ', refreshedToken)
   if (!refreshedToken || !refreshedToken.body) {
-    return new Response('refresh token failed')
+    return new Response('refresh token failed', { status: 500 })
   }
   const { token } = refreshedToken.body
   if (!token) {

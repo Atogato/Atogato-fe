@@ -122,6 +122,12 @@ export default function ProjectForm() {
             Authorization: `Bearer ${token}`,
           },
         })
+
+        if (!refreshed.ok) {
+          alert('프로젝트 생성에 실패했습니다. 다시 시도해 주세요.')
+          return
+        }
+
         const refreshData = await refreshed.json()
         if (refreshData.status === 200 && refreshData.token) {
           localStorage.setItem('token', refreshData.token)
@@ -131,8 +137,7 @@ export default function ProjectForm() {
         if (refreshResponse.ok) {
           router.replace('/project/list')
         } else {
-          localStorage.removeItem('token')
-          router.replace('/auth/login')
+          alert('프로젝트 생성에 실패했습니다. 다시 시도해 주세요.')
         }
         return
       default:
@@ -182,6 +187,7 @@ export default function ProjectForm() {
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     onChangeHandler(projectGenre, e.target.value)
                   }}
+                  value={elem.genre}
                 />
                 <label
                   className="mr-4 inline-block h-7 w-7 rounded border border-solid border-[#E1E1E1] hover:cursor-pointer peer-checked:hidden"
