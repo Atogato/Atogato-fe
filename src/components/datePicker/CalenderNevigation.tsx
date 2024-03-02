@@ -2,33 +2,22 @@ import ArrowLeft from '@/icons/arrow-left.svg'
 import ArrowRight from '@/icons/arrow-right.svg'
 import Dropdown from '@/icons/dropdown.svg'
 
-function Arrow() {}
-
 type Props = {
-  mode: 'DAY' | 'MONTH' | 'YEAR'
+  mode: 'century' | 'decade' | 'year' | 'month'
   month: string
   year: string
+  onChangeMode: (value: 'century' | 'decade' | 'year' | 'month') => void
   onChangeMonth: (month: string) => void
   onChangeYear: (year: string) => void
 }
 
 export default function CalenderNavigation(props: Props) {
-  const { mode, month, year, onChangeMonth, onChangeYear } = props
-
-  const handlerChangeMonth = (e: any) => {
-    const { value } = e.target
-    onChangeMonth(value)
-  }
-
-  const handlerChangeYear = (e: any) => {
-    const { value } = e.target
-    onChangeYear(value)
-  }
+  const { mode, month, year, onChangeMode, onChangeMonth, onChangeYear } = props
 
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between bg-[#7960BE]/10">
       <div className="flex justify-between">
-        {mode === 'DAY' && (
+        {mode === 'month' && (
           <ArrowLeft
             onClick={() => {
               const prevMonth = parseInt(month) - 1
@@ -38,10 +27,18 @@ export default function CalenderNavigation(props: Props) {
         )}
 
         <div className="flex">
-          <p> {month} </p>
-          <Dropdown />
+          <button
+            className="flex"
+            onClick={(e) => {
+              e.preventDefault()
+              onChangeMode('year')
+            }}
+          >
+            <p> {month} </p>
+            <Dropdown />
+          </button>
         </div>
-        {mode === 'DAY' && (
+        {mode === 'month' && (
           <ArrowRight
             onClick={() => {
               const nextMonth = (parseInt(month) + 1) % 12

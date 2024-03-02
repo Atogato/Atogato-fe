@@ -1,3 +1,6 @@
 .react-calendar {
+  --calender-background-color: rgba(121, 96, 190, 0.1);
   width: 450px;
+  background-color: var(--calender-background-color);
+  z-index: 999;
 }
