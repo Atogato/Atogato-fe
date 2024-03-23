@@ -8,12 +8,12 @@ export default function Gallery({ images = [] }: { images: string[] }) {
   return (
     <ul className="grid auto-rows-[1px] grid-cols-3 gap-5">
       {selectedImages.map((image, idx) => {
-        let rowSpan = 'row-end-[span_15]'
+        let rowSpan = '2xl:row-end-[span_25] xl:row-end-[span_16] lg:row-end-[span_15] row-end-[span_10]'
         switch (idx) {
           case 1:
           case 6:
           case 7:
-            rowSpan = 'row-end-[span_20]'
+            rowSpan = '2xl:row-end-[span_30] xl:row-end-[span_21] lg:row-end-[span_20] row-end-[span_15]'
         }
 
         const className = `${rowSpan} relative w-full overflow-hidden`

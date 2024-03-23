@@ -8,12 +8,12 @@ export default function ArtistGallery({ images = [] }: { images: string[] }) {
   return (
     <ul className="grid auto-rows-[1px] grid-cols-3 gap-5">
       {selectedImages.map((image, idx) => {
-        let rowSpan = 'row-end-[span_15]'
+        let rowSpan = '2xl:row-end-[span_25] xl:row-end-[span_16] lg:row-end-[span_15] row-end-[span_10]'
         switch (idx) {
           case 1:
           case 6:
           case 7:
-            rowSpan = 'row-end-[span_20]'
+            rowSpan = '2xl:row-end-[span_30] xl:row-end-[span_21] lg:row-end-[span_20] row-end-[span_15]'
         }
 
         const className = `${rowSpan} relative w-full overflow-hidden`
@@ -53,14 +53,12 @@ export default function ArtistGallery({ images = [] }: { images: string[] }) {
                   </div>
                 </div>
                 <div
-                  className="absolute inset-0 flex flex-col justify-end p-5
-                opacity-0 transition-all duration-200 ease-out  group-hover:bg-white/30 group-hover:opacity-100"
+                  className="absolute inset-0 hidden p-5 opacity-0	transition-all  duration-200
+                ease-out group-hover:bg-white/30 group-hover:opacity-100 2xl:flex 2xl:flex-col 2xl:justify-center "
                 >
-                  <div className="ml-[20px] mt-[374px] text-[28px] font-semibold text-[#171616]">
-                    여러가지 감정을 연기
-                  </div>
+                  <div className="ml-[20px] text-[28px] font-semibold text-[#171616]">여러가지 감정을 연기</div>
                   <div className="ml-[20px] mt-[6px] text-[18px] font-semibold text-[#171616]/75">이수진</div>
-                  <div className="mt-[57px] text-[20px] font-bold">
+                  <div className="mt-[57px] truncate text-[20px] font-bold">
                     여러가지 추상적인 그림을 그려서 프로젝트를 만들어 팀원들과 진행해가고 있습니다.
                   </div>
                   <div className="mt-[8px] text-[14px] opacity-70">

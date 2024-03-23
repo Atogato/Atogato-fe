@@ -8,12 +8,12 @@ export default function Gallery2({ images = [] }: { images: string[] }) {
   return (
     <ul className="grid auto-rows-[1px] grid-cols-3 gap-5">
       {selectedImages.map((image, idx) => {
-        let rowSpan = 'row-end-[span_15]'
+        let rowSpan = '2xl:row-end-[span_25] xl:row-end-[span_16] lg:row-end-[span_15] row-end-[span_10]'
         switch (idx) {
           case 1:
           case 6:
           case 7:
-            rowSpan = 'row-end-[span_20]'
+            rowSpan = '2xl:row-end-[span_30] xl:row-end-[span_21] lg:row-end-[span_20] row-end-[span_15]'
         }
 
         const className = `${rowSpan} relative w-full overflow-hidden`
@@ -29,12 +29,10 @@ export default function Gallery2({ images = [] }: { images: string[] }) {
                   className="h-full w-full group-hover:blur-[4px]"
                 ></Image>
                 <div
-                  className="absolute inset-0 flex flex-col justify-end bg-white/30 p-5
+                  className="absolute inset-0 flex flex-col justify-center bg-white/30 p-5
                 opacity-0 transition-all duration-200 ease-out  group-hover:opacity-100"
                 >
-                  <div className="ml-[30px] mt-[374px] text-[28px] font-semibold text-[#171616]">
-                    여러가지 무늬를 그린 그림
-                  </div>
+                  <div className="ml-[30px] text-[28px] font-semibold text-[#171616]">여러가지 무늬를 그린 그림</div>
                   <div className="ml-[30px] mt-[6px] text-[18px] font-semibold text-[#171616]/75">김작가&이화가</div>
                   <div className="mt-[57px] text-[20px] font-bold">
                     여러가지 추상적인 그림을 그려서 프로젝트를 만들어 팀원들과 진행해가고 있습니다.

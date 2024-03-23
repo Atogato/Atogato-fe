@@ -21,7 +21,7 @@ export default function Slider() {
     <Flicking
       style={{ minHeight: '450px', overflow: 'visible', overflowX: 'hidden', display: 'flex', alignItems: 'center' }}
       align="prev"
-      cameraClass="flex gap-5 animate-[scroll_25s_linear_infinite]"
+      cameraClass="flex gap-5 animate-[scroll_18s_linear_infinite]"
       preventDefaultOnDrag={true}
       disableOnInit={true}
     >
