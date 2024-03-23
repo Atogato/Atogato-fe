@@ -35,13 +35,13 @@ export default function Timeline({ data }: projectsProps): JSX.Element {
   }
 
   return (
-    <div className="mx-[240px] overflow-y-scroll">
+    <div className="w-full overflow-y-scroll">
       <div className="flex flex-row gap-x-[24px]">
         {/* 나중에 고쳐야함, instead of slice, change number of days saved to this week */}
         {thisWeek.slice(0, 6).map(({ day, date, projectsForDay }, index) => (
-          <div key={date} className={`col-span-1 w-[220px]`}>
+          <div key={date} className="col-span-1 w-[220px]">
             <div className="w-[220px]">
-              <div className="mb-6 h-[196px] rounded-lg bg-white px-[70px] py-[42px]">
+              <div className="mb-6 h-[196px] rounded-lg border border-transparent bg-white px-[70px] py-[42px]">
                 <div className="text-center">
                   <div className="Poppins mt-[10px] text-[22px] font-medium text-[#919095]">{AllDays[day]}</div>
                   <div className="Poppins mt-[8px] text-[44px] font-semibold text-[#171616]">{date}</div>
@@ -49,7 +49,10 @@ export default function Timeline({ data }: projectsProps): JSX.Element {
               </div>
               <div>
                 {projectsForDay.map((project) => (
-                  <div key={project.projectId} className="group mb-4 h-[112px] rounded bg-white hover:bg-[#7960BE]">
+                  <div
+                    key={project.projectId}
+                    className="group mb-4 h-[112px] rounded border border-transparent bg-white hover:bg-[#7960BE]"
+                  >
                     <div className="inline-grid w-[220px]  text-[#171616]">
                       <Link
                         prefetch={false}
